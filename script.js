@@ -1,4 +1,19 @@
 // =========================================
+// Email 反爬蟲：拆成片段在載入後才組出來，原始碼裡看不到完整地址
+// 想換信箱，改下面這三段字串即可
+// =========================================
+document.addEventListener('DOMContentLoaded', () => {
+    const link = document.getElementById('emailLink');
+    const text = document.getElementById('emailText');
+    if (!link || !text) return;
+    const user = ['m', 'e', 'i', 'j', 'a', 'z', 'z', '1', '2', '0', '6'].join('');
+    const domain = ['g', 'm', 'a', 'i', 'l'].join('') + '.' + ['c', 'o', 'm'].join('');
+    const addr = user + '@' + domain;
+    link.href = 'mailto:' + addr;
+    text.textContent = addr;
+});
+
+// =========================================
 // 作品資料：想改標題／說明，直接編輯這裡即可
 // key = assets/works/ 裡的圖檔名
 // =========================================
