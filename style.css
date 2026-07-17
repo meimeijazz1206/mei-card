@@ -198,15 +198,6 @@ body {
     letter-spacing: 0.02em;
 }
 
-.hero-name-en {
-    margin-top: 14px;
-    font-family: var(--sans);
-    font-weight: 300;
-    font-size: clamp(14px, 2vw, 20px);
-    letter-spacing: 0.5em;
-    color: var(--ink-soft);
-}
-
 .hero-kicker {
     margin-top: 20px;
     padding-top: 16px;
@@ -672,38 +663,6 @@ body {
     line-height: 2;
     color: var(--ink-soft);
     white-space: pre-line;
-}
-
-/* =========================================
-   互動小寵物（可拖曳、自己亂走）
-   ========================================= */
-.pet-container {
-    position: fixed;
-    z-index: 500;
-    left: 0;
-    top: 0;
-    pointer-events: none;
-}
-
-#pet {
-    position: fixed;
-    width: 96px;
-    height: auto;
-    pointer-events: auto;
-    cursor: grab;
-    filter: drop-shadow(0 6px 10px rgba(23, 22, 15, 0.25));
-    left: 50%;
-    top: 80%;
-    transform: translate(-50%, -50%);
-    transition: transform 0.15s ease;
-}
-
-#pet:active {
-    cursor: grabbing;
-}
-
-@media (max-width: 600px) {
-    #pet { width: 72px; }
 }
 
 /* =========================================
