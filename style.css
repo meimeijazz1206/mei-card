@@ -1,28 +1,47 @@
 /* =========================================
    Mei Hsu ─ Portfolio 2026
-   風格：現代設計作品集／淺灰中性色＋大字排版＋細線框
-   參考：industrial-design portfolio + arc-of-cards
+   風格：暖奶油底 × 圓角語言 × 單一字型系統
+   Token 來源：awesome-claude-design/design-md/mastercard.DESIGN.md
+   舊版（淺灰底＋青檸／Tiffany 藍撞色＋Anton）存於 style-hybrid.css，
+   更早的原始版本在 git 歷史裡。
    ========================================= */
 :root {
-    --paper: #e7e6e2;
-    /* 淺暖灰底 */
-    --panel: #f2f1ee;
-    /* 卡片／面板亮面 */
-    --ink: #17160f;
-    /* 近黑 */
-    --ink-soft: #75716a;
-    /* 次要文字 */
-    --line: rgba(23, 22, 15, 0.16);
-    --line-strong: rgba(23, 22, 15, 0.4);
-    --lime: #deed51;
-    /* 青檸綠（撞色 A） */
-    --blue: #12cfda;
-    /* 亮 Tiffany 藍（撞色 B，比參考更亮） */
-    --accent: var(--blue);
-    --serif: "Noto Serif TC", serif;
-    --display: "Anton", sans-serif;
-    --sans: "Archivo", "Noto Sans TC", sans-serif;
+    /* ---- 表面 ---- */
+    --paper: #f3f0ee;
+    /* Canvas Cream：頁面底色，不用純白也不用原本的冷灰 */
+    --panel: #fcfbfa;
+    /* Lifted Cream：紙上紙 */
+    --white: #ffffff;
+
+    /* ---- 文字 ---- */
+    --ink: #141413;
+    /* 暖黑，非純黑 */
+    --ink-soft: #696969;
+    --line: rgba(20, 20, 19, 0.10);
+    --line-strong: rgba(20, 20, 19, 0.28);
+
+    /* ---- 強調 ---- */
+    --orange: #f37338;
+    /* Orange Light：裝飾、軌跡弧線、注意力提示 */
+    --signal: #cf4500;
+    /* Signal Orange：只給法遵／同意，此頁不用 */
+    --clay: #9a3a0a;
+    --link: #3860be;
+    --accent: var(--orange);
+
+    /* ---- 字型（單一字型系統，中文才另接）---- */
+    --display: "Sofia Sans", sans-serif;
+    --sans: "Sofia Sans", "Noto Sans TC", sans-serif;
     --tc: "Noto Sans TC", sans-serif;
+
+    /* ---- 圓角（刻意跳過 8–16px）---- */
+    --r-btn: 20px;
+    --r-frame: 40px;
+    --r-pill: 999px;
+
+    /* ---- 陰影 ---- */
+    --e1: rgba(0, 0, 0, 0.04) 0 4px 24px 0;
+    --e2: rgba(0, 0, 0, 0.08) 0 24px 48px 0;
 }
 
 * {
@@ -39,7 +58,8 @@ body {
     background: var(--paper);
     color: var(--ink);
     font-family: var(--sans);
-    font-weight: 400;
+    font-weight: 450;
+    /* 450 是這套系統的靈魂，不要改成 400 */
     -webkit-font-smoothing: antialiased;
 }
 
@@ -54,9 +74,9 @@ body {
 .hero {
     position: relative;
     min-height: 100vh;
-    max-width: 1180px;
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 22px 32px 40px;
+    padding: 24px 48px 48px;
     display: flex;
     flex-direction: column;
 }
@@ -64,36 +84,33 @@ body {
 .hero-bar {
     display: flex;
     justify-content: space-between;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.16em;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.56px;
+    text-transform: uppercase;
     color: var(--ink-soft);
-    padding-bottom: 12px;
+    padding-bottom: 16px;
 }
 
-/* 中央網格框 + 四角括號 */
+/* 原本的細線框＋四角括號改成 40px 圓角面板：mastercard 沒有硬邊框語言 */
 .hero-grid {
     position: relative;
     flex: 1;
-    border: 1px solid var(--line);
-    padding: clamp(24px, 5vw, 60px) clamp(20px, 4vw, 52px);
+    background: var(--panel);
+    border: 0;
+    border-radius: var(--r-frame);
+    box-shadow: var(--e2);
+    padding: clamp(32px, 5vw, 64px) clamp(24px, 4vw, 64px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 40px;
+    gap: 48px;
 }
 
+/* 四角括號在這套語言裡不成立，隱藏 */
 .corner {
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    border: 2px solid var(--ink);
+    display: none;
 }
-
-.corner.tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
-.corner.tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
-.corner.bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
-.corner.br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
 
 .hero-head,
 .hero-cols,
@@ -102,7 +119,7 @@ body {
     z-index: 1;
 }
 
-/* ===== 左上／右上：逗號造型裝飾群 ===== */
+/* ===== 裝飾群：逗號改成圓形，呼應圓形人像語言 ===== */
 .hero-deco {
     position: absolute;
     top: 0;
@@ -112,68 +129,71 @@ body {
     pointer-events: none;
 }
 
-.hero-deco-left {
-    left: 0;
-}
-
-.hero-deco-right {
-    right: 0;
-}
+.hero-deco-left { left: 0; }
+.hero-deco-right { right: 0; }
 
 .hero-vertical {
     position: absolute;
-    top: 6px;
-    right: 4px;
+    top: 24px;
+    right: 24px;
     writing-mode: vertical-rl;
     white-space: nowrap;
-    font-family: var(--serif);
-    font-weight: 600;
-    font-size: clamp(15px, 1.6vw, 20px);
+    font-family: var(--tc);
+    font-weight: 500;
+    font-size: clamp(14px, 1.5vw, 18px);
     letter-spacing: 0.3em;
     color: var(--ink);
     z-index: 3;
 }
 
-/* 逗號主體：圓頭＋尾巴收尖的淚滴形 */
+/* 圓形取代淚滴：mastercard 只有正圓與全藥丸。
+   純色大圓在這裡是裝飾不是內容，所以壓小、退到文字外側，
+   主要的連結感交給右側的細橘軌跡弧線。 */
 .comma {
     position: absolute;
-    width: clamp(46px, 6.5vw, 82px);
-    height: clamp(66px, 9.5vw, 118px);
-    border-radius: 50% 50% 8% 50%;
+    border-radius: 50%;
+    transform: none;
 }
 
 .comma-lime {
-    top: 4%;
-    left: 4%;
-    background: var(--lime);
-    transform: rotate(-18deg);
+    top: 2%;
+    left: -4%;
+    width: clamp(40px, 4.5vw, 62px);
+    height: clamp(40px, 4.5vw, 62px);
+    background: var(--orange);
 }
 
+/* 右上：改成 1px 橘色軌跡弧線，這是 mastercard 最具辨識度的手勢 */
 .comma-blue {
-    top: 8%;
-    right: 18%;
-    background: var(--blue);
-    transform: rotate(184deg);
+    top: 4%;
+    right: 6%;
+    width: clamp(120px, 14vw, 200px);
+    height: clamp(120px, 14vw, 200px);
+    background: none;
+    border: 1px solid var(--orange);
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    transform: rotate(35deg);
 }
 
-/* 小圓點（呼應逗號／引號的伴隨小點） */
 .comma-dot {
     position: absolute;
-    width: clamp(16px, 2.4vw, 26px);
-    height: clamp(16px, 2.4vw, 26px);
+    width: clamp(10px, 1.2vw, 14px);
+    height: clamp(10px, 1.2vw, 14px);
     border-radius: 50%;
 }
 
 .comma-dot-blue {
     top: 2%;
-    left: 30%;
-    background: var(--blue);
+    left: 9%;
+    background: var(--clay);
 }
 
+/* 弧線末端的衛星點 */
 .comma-dot-lime {
-    top: 64%;
-    right: 6%;
-    background: var(--lime);
+    top: 46%;
+    right: 3%;
+    background: var(--orange);
 }
 
 /* 大字標題區 */
@@ -181,45 +201,58 @@ body {
     position: relative;
 }
 
+/* eyebrow：唯一允許全大寫的層級，前面那顆點不要省略 */
 .hero-year {
-    display: block;
-    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
     font-weight: 700;
-    letter-spacing: 0.3em;
+    letter-spacing: 0.56px;
+    text-transform: uppercase;
     color: var(--ink-soft);
-    margin-bottom: 10px;
+    margin-bottom: 16px;
 }
 
+.hero-year::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--orange);
+}
+
+/* 一個字型系統，靠字級／字重／字距拉對比，不換字體 */
 .hero-name {
     font-family: var(--display);
-    font-weight: 400;
-    font-size: clamp(38px, 9vw, 114px);
-    line-height: 0.9;
-    letter-spacing: 0.02em;
+    font-weight: 500;
+    font-size: clamp(40px, 8vw, 96px);
+    line-height: 1;
+    letter-spacing: -0.02em;
 }
 
 .hero-kicker {
-    margin-top: 20px;
-    padding-top: 16px;
-    border-top: 3px solid var(--blue);
+    margin-top: 24px;
+    padding-top: 0;
+    border-top: 0;
     font-family: var(--tc);
-    font-size: clamp(13px, 1.6vw, 16px);
+    font-size: clamp(14px, 1.6vw, 16px);
     font-weight: 500;
-    letter-spacing: 0.06em;
-    color: var(--ink);
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
 }
 
 .hero-kicker span {
-    color: var(--blue);
+    color: var(--orange);
     font-weight: 700;
-    margin: 0 2px;
+    margin: 0 4px;
 }
 
-/* 中段兩欄：簡介 + 連結 */
+/* 中段兩欄 */
 .hero-cols {
     display: grid;
     grid-template-columns: 1.1fr 1fr;
-    gap: clamp(24px, 5vw, 72px);
+    gap: clamp(24px, 5vw, 64px);
     align-items: start;
 }
 
@@ -227,31 +260,32 @@ body {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 11px;
+    gap: 12px;
     font-family: var(--tc);
 }
 
 .hero-bio li {
     position: relative;
     padding-left: 20px;
-    font-size: 14px;
-    font-weight: 300;
-    line-height: 1.75;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.8;
 }
 
+/* 方塊點改圓點，統一圓形語言 */
 .hero-bio li::before {
     content: "";
     position: absolute;
     left: 0;
-    top: 9px;
-    width: 8px;
-    height: 8px;
-    background: var(--lime);
+    top: 11px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--orange);
 }
 
 .hero-bio li:nth-child(even)::before {
-    background: var(--blue);
-    border-radius: 50%;
+    background: var(--ink);
 }
 
 .hero-links {
@@ -265,40 +299,46 @@ body {
     grid-template-columns: 34px 92px 1fr auto;
     align-items: baseline;
     gap: 10px;
-    padding: 13px 2px;
+    padding: 16px 12px;
     border-bottom: 1px solid var(--line);
+    border-radius: var(--r-btn);
     text-decoration: none;
     color: var(--ink);
-    transition: padding-left 0.18s ease, background 0.18s ease;
+    transition: background 0.18s ease, color 0.18s ease;
 }
 
+/* hover 用暖黑填滿，不用撞色：mastercard 的主要互動色就是 ink */
 .hero-links a:hover {
-    padding-left: 10px;
-    background: var(--lime);
+    background: var(--ink);
+    color: var(--paper);
 }
 
 .lk-n {
-    font-size: 11px;
+    font-size: 14px;
     font-weight: 700;
-    color: var(--blue);
-    letter-spacing: 0.1em;
+    color: var(--orange);
+    letter-spacing: 0.56px;
 }
 
 .lk-l {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.18em;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.56px;
     text-transform: uppercase;
     color: var(--ink-soft);
 }
 
+.hero-links a:hover .lk-l {
+    color: var(--paper);
+}
+
 .lk-v {
-    font-size: 14px;
-    font-weight: 400;
+    font-size: 16px;
+    font-weight: 450;
 }
 
 .lk-a {
-    color: var(--blue);
+    color: var(--orange);
     transition: transform 0.18s ease;
 }
 
@@ -306,7 +346,7 @@ body {
     transform: translate(3px, -3px);
 }
 
-/* 底部標籤列 */
+/* 底部標籤列：全藥丸 chip */
 .hero-tagrow {
     display: flex;
     flex-wrap: wrap;
@@ -315,40 +355,65 @@ body {
 }
 
 .hero-tagrow span {
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    color: var(--ink-soft);
-    border: 1px solid var(--line);
-    border-radius: 100px;
-    padding: 5px 13px;
+    font-size: 14px;
+    font-weight: 450;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    background: var(--white);
+    border: 1.5px solid transparent;
+    border-radius: var(--r-pill);
+    padding: 8px 20px;
+    cursor: default;
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
 }
 
+/* 滑過一律翻成暖黑藥丸 */
+.hero-tagrow span:hover {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+}
+
+/* 三階層次：① 實心暖黑（主定位）③ 橘框（次重點）其餘白底 */
 .hero-tagrow span:nth-child(1) {
-    background: var(--blue);
-    border-color: var(--blue);
-    color: #fff;
-    font-weight: 600;
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+    font-weight: 500;
+}
+
+/* 已經是實心的那顆，hover 反轉成白底才有回饋 */
+.hero-tagrow span:nth-child(1):hover {
+    background: var(--white);
+    color: var(--ink);
 }
 
 .hero-tagrow span:nth-child(3) {
-    background: var(--lime);
-    border-color: var(--lime);
-    color: var(--ink);
-    font-weight: 600;
+    background: var(--white);
+    border-color: var(--orange);
+    color: var(--orange);
+    font-weight: 500;
+}
+
+.hero-tagrow span:nth-child(3):hover {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
 }
 
 /* SCROLL 提示 */
 .hero-scroll {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding-top: 18px;
+    gap: 16px;
+    padding-top: 24px;
 }
 
 .hero-scroll-text {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.28em;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.56px;
+    text-transform: uppercase;
     color: var(--ink-soft);
 }
 
@@ -365,7 +430,7 @@ body {
     position: absolute;
     inset: 0;
     width: 60px;
-    background: var(--blue);
+    background: var(--orange);
     animation: scrollSlide 2s ease-in-out infinite;
 }
 
@@ -375,14 +440,59 @@ body {
 }
 
 @media (max-width: 720px) {
+    .hero { padding: 20px 16px 32px; }
+
+    .hero-bar {
+        font-size: 11px;
+        gap: 12px;
+    }
+
+    .hero-grid {
+        border-radius: 24px;
+        padding: 32px 20px;
+        gap: 32px;
+    }
+
     .hero-cols { grid-template-columns: 1fr; gap: 28px; }
-    .hero-meta { flex-direction: column; align-items: flex-start; }
-    .hero-role { text-align: left; }
+
+    /* 連結列在窄螢幕改成兩行，避免 email 撐爆版面 */
+    .hero-links a {
+        grid-template-columns: 28px 1fr auto;
+        grid-template-areas:
+            "n l a"
+            ". v v";
+        row-gap: 4px;
+        padding: 14px 10px;
+    }
+
+    .lk-n { grid-area: n; }
+    .lk-l { grid-area: l; }
+    .lk-v { grid-area: v; font-size: 15px; word-break: break-all; }
+    .lk-a { grid-area: a; }
+
+    /* 直排標語與弧線在窄螢幕會互相打架，只留弧線 */
+    .hero-vertical { display: none; }
+
+    .comma-blue {
+        width: 110px;
+        height: 110px;
+        right: -10px;
+    }
+
+    .comma-dot-lime { right: -2px; top: 38%; }
+
+    .comma-lime {
+        top: -14px;
+        left: -14px;
+        width: 56px;
+        height: 56px;
+    }
+
+    .comma-dot-blue { top: -18px; left: 34px; }
 }
 
 /* =========================================
-   圓點過場疊層（單色墨點）
-   --p：捲動進度 0~1，由 script.js 寫入
+   圓點過場疊層
    ========================================= */
 .dot-overlay {
     --p: 0;
@@ -407,7 +517,7 @@ body {
 }
 
 .pixel-dot {
-    background: var(--blue);
+    background: var(--ink);
     border-radius: 50%;
     opacity: clamp(0,
             calc(clamp(0, calc((var(--p) - var(--t) * 0.4) * 9), 1) - clamp(0, calc((var(--p) - 0.75 - var(--t) * 0.08) * 5), 1)),
@@ -420,8 +530,9 @@ body {
     position: relative;
     z-index: 2;
     font-family: var(--display);
-    font-size: clamp(20px, 4vw, 34px);
-    letter-spacing: 0.14em;
+    font-weight: 500;
+    font-size: clamp(24px, 4vw, 36px);
+    letter-spacing: -0.02em;
     text-transform: uppercase;
     color: var(--ink);
     opacity: clamp(0,
@@ -431,7 +542,6 @@ body {
 
 /* =========================================
    作品弧形畫布
-   --rot-l / --rot-r / --rise 由 script.js 寫入
    ========================================= */
 .works-stage {
     --rot-l: 0deg;
@@ -441,12 +551,8 @@ body {
     min-height: 230vh;
     z-index: 41;
     background-color: var(--paper);
-    /* 底紋：細點網格 + 極淡撞色暈染，避免背景過素 */
-    background-image:
-        radial-gradient(circle at 16% 22%, rgba(18, 207, 218, 0.10), transparent 40%),
-        radial-gradient(circle at 84% 74%, rgba(222, 237, 81, 0.14), transparent 42%),
-        radial-gradient(rgba(23, 22, 15, 0.14) 1.4px, transparent 1.4px);
-    background-size: auto, auto, 26px 26px;
+    /* 原本的點陣底紋拿掉：mastercard 的留白是結構，不是待填的空白 */
+    background-image: none;
 }
 
 .works-pin {
@@ -466,32 +572,42 @@ body {
 }
 
 .works-idx {
-    display: block;
-    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
     font-weight: 700;
-    letter-spacing: 0.3em;
-    color: var(--blue);
-    margin-bottom: 8px;
+    letter-spacing: 0.56px;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+}
+
+.works-idx::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--orange);
 }
 
 .works-title {
     font-family: var(--display);
-    font-weight: 400;
-    font-size: clamp(30px, 6vw, 60px);
-    letter-spacing: 0.04em;
+    font-weight: 500;
+    font-size: clamp(32px, 6vw, 64px);
+    letter-spacing: -0.02em;
     text-transform: uppercase;
     line-height: 1;
 }
 
 .works-sub {
-    margin-top: 12px;
+    margin-top: 16px;
     font-family: var(--tc);
-    font-size: 12px;
-    letter-spacing: 0.24em;
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
     color: var(--ink-soft);
 }
 
-/* 圓心貼左右邊緣偏下；--rise 隨捲動上抬 */
 .edge-wheel {
     position: absolute;
     top: 90%;
@@ -513,7 +629,6 @@ body {
 .edge-wheel.left .rotor { transform: rotate(var(--rot-l)); }
 .edge-wheel.right .rotor { transform: rotate(var(--rot-r)); }
 
-/* 卡片繞圓心排列 */
 .work-card {
     --gap: 30deg;
     --R: clamp(200px, 58vw, 400px);
@@ -532,13 +647,14 @@ body {
     transform: rotate(calc((var(--c) - var(--i)) * var(--gap))) translateX(calc(-1 * var(--R)));
 }
 
+/* 原本 10px 圓角落在 mastercard 明令避開的 8–16px 區間，改 20px */
 .work-card img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     background: var(--panel);
-    border-radius: 10px;
-    box-shadow: 0 6px 22px rgba(23, 22, 15, 0.14);
+    border-radius: var(--r-btn);
+    box-shadow: var(--e1);
     transition: transform 0.24s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.24s ease;
 }
 
@@ -548,9 +664,10 @@ body {
 
 .work-card:hover img {
     transform: scale(2.7);
-    box-shadow: 0 18px 50px rgba(23, 22, 15, 0.32);
+    box-shadow: var(--e2);
 }
 
+/* 主要 CTA：暖黑藥丸，文字用 cream 不是純白 */
 .works-top {
     position: absolute;
     bottom: 6vh;
@@ -559,21 +676,20 @@ body {
     width: max-content;
     margin: 0 auto;
     z-index: 3;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.24em;
-    color: var(--ink);
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.48px;
+    color: var(--paper);
+    background: var(--ink);
     text-decoration: none;
-    padding: 10px 22px;
-    border: 1px solid var(--ink);
-    border-radius: 100px;
-    transition: all 0.15s ease;
+    padding: 10px 28px;
+    border: 1.5px solid var(--ink);
+    border-radius: var(--r-btn);
+    transition: transform 0.15s ease;
 }
 
 .works-top:hover {
-    background: var(--blue);
-    border-color: var(--blue);
-    color: #fff;
+    transform: scale(0.98);
 }
 
 /* =========================================
@@ -600,7 +716,7 @@ body {
 .card-modal-backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(23, 22, 15, 0.62);
+    background: rgba(20, 20, 19, 0.62);
     backdrop-filter: blur(3px);
     cursor: pointer;
 }
@@ -611,56 +727,58 @@ body {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    max-width: 380px;
+    max-width: 400px;
     max-height: 88vh;
     overflow-y: auto;
     background: var(--panel);
-    padding: 16px 16px 24px;
-    border-radius: 12px;
+    padding: 24px 24px 32px;
+    border-radius: var(--r-frame);
+    box-shadow: var(--e2);
 }
 
 .card-modal-close {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 14px;
+    right: 14px;
     z-index: 2;
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     border: none;
-    background: var(--ink);
-    color: var(--paper);
-    font-size: 13px;
+    background: var(--white);
+    color: var(--ink);
+    font-size: 14px;
     cursor: pointer;
     border-radius: 50%;
+    box-shadow: var(--e1);
 }
 
 .card-modal-img {
     width: 100%;
-    border-radius: 8px;
+    border-radius: var(--r-btn);
 }
 
 .card-modal-title {
     font-family: var(--tc);
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 700;
-    letter-spacing: 0.04em;
+    letter-spacing: -0.48px;
 }
 
 .card-modal-meta {
-    margin-top: 6px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.18em;
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.56px;
     text-transform: uppercase;
     color: var(--ink-soft);
 }
 
 .card-modal-desc {
-    margin-top: 12px;
+    margin-top: 16px;
     font-family: var(--tc);
-    font-size: 13px;
-    font-weight: 300;
-    line-height: 2;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.9;
     color: var(--ink-soft);
     white-space: pre-line;
 }
