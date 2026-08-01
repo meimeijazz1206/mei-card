@@ -374,7 +374,7 @@ body {
     color: var(--paper);
 }
 
-/* 三階層次：① 實心暖黑（主定位）③ 橘框（次重點）其餘白底 */
+/* 只有第一顆是實心暖黑（主定位），其餘一律白底，靠 hover 做回饋 */
 .hero-tagrow span:nth-child(1) {
     background: var(--ink);
     border-color: var(--ink);
@@ -386,19 +386,6 @@ body {
 .hero-tagrow span:nth-child(1):hover {
     background: var(--white);
     color: var(--ink);
-}
-
-.hero-tagrow span:nth-child(3) {
-    background: var(--white);
-    border-color: var(--orange);
-    color: var(--orange);
-    font-weight: 500;
-}
-
-.hero-tagrow span:nth-child(3):hover {
-    background: var(--ink);
-    border-color: var(--ink);
-    color: var(--paper);
 }
 
 /* SCROLL 提示 */
