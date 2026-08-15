@@ -1,0 +1,402 @@
+<title>AI 工作流課程筆記 · 教學用（Mei 個人整理）</title>
+<style>
+  :root{
+    --bg:#0B0B0F; --bg2:#15151D; --panel:#1B1B25;
+    --ink:#F4F1EC; --ink-soft:#A7A4B2; --muted:#6E6B7A;
+    --accent:#FF3D8B; --accent2:#26D6D6; --amber:#FFC24B;
+    --line:rgba(255,255,255,.13); --line2:rgba(255,255,255,.07);
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg); color:var(--ink); overflow:hidden;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Segoe UI",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased; letter-spacing:.01em;
+  }
+  .mono{font-family:ui-monospace,"SF Mono","JetBrains Mono",Menlo,monospace}
+
+  .deck{position:fixed; inset:0}
+  .slide{
+    position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center;
+    padding:clamp(32px,6vw,90px); padding-bottom:clamp(70px,9vh,120px);
+    opacity:0; visibility:hidden; transform:scale(.985);
+    transition:opacity .45s ease, transform .45s ease;
+  }
+  .slide.active{opacity:1; visibility:visible; transform:none}
+  @media (prefers-reduced-motion:reduce){ .slide{transition:none} }
+  .inner{width:100%; max-width:1080px; margin:0 auto}
+
+  .eyebrow{
+    font-size:clamp(12px,1.5vw,15px); letter-spacing:.24em; text-transform:uppercase;
+    color:var(--accent); font-weight:700; display:flex; align-items:center; gap:14px; margin-bottom:22px;
+  }
+  .eyebrow::before{content:""; width:34px; height:3px; background:var(--accent); border-radius:2px}
+  h1{font-size:clamp(38px,7.2vw,88px); line-height:1.04; font-weight:800; letter-spacing:-.02em; text-wrap:balance}
+  h2{font-size:clamp(30px,5vw,60px); line-height:1.1; font-weight:800; letter-spacing:-.015em; text-wrap:balance}
+  .sub{margin-top:26px; font-size:clamp(17px,2.3vw,26px); color:var(--ink-soft); font-weight:400; max-width:26ch; text-wrap:pretty}
+  .kick{font-family:ui-monospace,monospace; color:var(--accent2); font-size:clamp(13px,1.6vw,17px); font-weight:600; letter-spacing:.08em; margin-bottom:18px}
+
+  /* thesis slide */
+  .thesis{font-size:clamp(26px,4.4vw,52px); line-height:1.28; font-weight:700; letter-spacing:-.01em; text-wrap:balance}
+  .thesis b{color:var(--accent); }
+  .thesis .hl{color:var(--amber)}
+
+  /* agenda / lists */
+  ol.agenda{list-style:none; counter-reset:a; display:grid; gap:clamp(10px,1.6vh,20px); margin-top:8px}
+  ol.agenda li{counter-increment:a; display:flex; align-items:baseline; gap:20px; font-size:clamp(19px,2.7vw,32px); font-weight:600}
+  ol.agenda li::before{content:counter(a,decimal-leading-zero); font-family:ui-monospace,monospace; color:var(--accent); font-size:clamp(14px,1.7vw,20px); font-weight:700; min-width:2.2ch}
+  ol.agenda li span{color:var(--ink-soft); font-weight:400; font-size:.72em}
+
+  .qrow{display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(12px,1.6vw,20px); margin-top:34px}
+  .q{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:clamp(16px,2vw,26px)}
+  .q .n{font-family:ui-monospace,monospace; color:var(--accent2); font-size:14px; font-weight:700}
+  .q .t{font-size:clamp(18px,2.3vw,27px); font-weight:700; margin-top:8px}
+  .q .d{font-size:clamp(13px,1.5vw,17px); color:var(--ink-soft); margin-top:6px}
+
+  /* three engines */
+  .cols3{display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(12px,1.5vw,20px); margin-top:34px}
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:clamp(16px,1.8vw,26px)}
+  .card .lab{font-family:ui-monospace,monospace; color:var(--accent); font-size:13px; font-weight:700; letter-spacing:.06em}
+  .card .h{font-size:clamp(19px,2.3vw,27px); font-weight:800; margin-top:10px}
+  .card .s{font-size:clamp(13px,1.5vw,17px); color:var(--ink-soft); margin-top:10px; line-height:1.55}
+  .card.on{border-color:var(--accent); box-shadow:0 0 0 1px var(--accent) inset}
+  .card .badge{display:inline-block; margin-top:12px; font-size:12px; color:var(--accent); border:1px solid var(--accent); border-radius:99px; padding:3px 11px; font-weight:600}
+
+  /* formula / prompt blocks */
+  .formula{margin-top:32px; background:var(--panel); border:1px solid var(--line); border-left:4px solid var(--accent2); border-radius:14px; padding:clamp(18px,2.2vw,30px); font-family:ui-monospace,monospace; font-size:clamp(15px,2vw,25px); font-weight:600; line-height:1.5; color:var(--ink); overflow-x:auto}
+  .prompt{margin-top:16px; background:var(--bg2); border:1px solid var(--line); border-radius:12px; padding:clamp(14px,1.7vw,22px); font-family:ui-monospace,monospace; font-size:clamp(14px,1.7vw,20px); line-height:1.55; color:var(--ink-soft); white-space:pre-wrap; word-break:break-word}
+  .prompt .zh{color:var(--ink); display:block; margin-bottom:8px}
+  .prompt .ph{color:var(--accent)}
+  .steplab{font-family:ui-monospace,monospace; color:var(--accent2); font-weight:700; font-size:clamp(13px,1.5vw,17px); margin-top:20px}
+
+  /* compare */
+  .cmp{display:grid; gap:14px; margin-top:30px}
+  .cmp .row{display:grid; grid-template-columns:1fr 1.4fr; gap:16px; align-items:center}
+  .cmp .bad{background:rgba(255,61,139,.08); border:1px solid rgba(255,61,139,.3); border-radius:12px; padding:14px 18px; font-size:clamp(15px,1.9vw,22px); font-weight:600}
+  .cmp .good{background:rgba(38,214,214,.07); border:1px solid rgba(38,214,214,.28); border-radius:12px; padding:14px 18px; font-size:clamp(14px,1.7vw,20px); color:var(--ink)}
+  .cmp .bad::before{content:"感受 ✗ "; color:var(--accent); font-family:ui-monospace,monospace; font-size:.8em; font-weight:700}
+  .cmp .good::before{content:"規則 ✓ "; color:var(--accent2); font-family:ui-monospace,monospace; font-size:.8em; font-weight:700}
+
+  /* pipeline / funnel */
+  .flow{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:34px}
+  .chip{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:clamp(12px,1.4vw,18px) clamp(14px,1.6vw,22px); font-size:clamp(15px,1.8vw,22px); font-weight:700}
+  .chip .s{display:block; font-size:.62em; color:var(--ink-soft); font-weight:400; margin-top:3px}
+  .arr{color:var(--accent); font-family:ui-monospace,monospace; font-size:clamp(18px,2vw,26px)}
+  .funnel{display:grid; gap:10px; margin-top:30px}
+  .fl{display:flex; align-items:center; gap:18px; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:clamp(12px,1.4vw,18px) clamp(16px,1.8vw,24px)}
+  .fl .k{font-family:ui-monospace,monospace; color:var(--accent2); font-weight:700; font-size:clamp(14px,1.6vw,19px); width:2.4ch; flex-shrink:0}
+  .fl .b{font-size:clamp(15px,1.8vw,22px); font-weight:600}
+  .fl .b span{color:var(--ink-soft); font-weight:400; font-size:.82em}
+  .fl:nth-child(2){margin-left:4%} .fl:nth-child(3){margin-left:8%}
+  .fl:nth-child(4){margin-left:12%} .fl:nth-child(5){margin-left:16%}
+
+  ul.big{list-style:none; display:grid; gap:14px; margin-top:30px}
+  ul.big li{position:relative; padding-left:34px; font-size:clamp(18px,2.4vw,30px); font-weight:600}
+  ul.big li::before{content:""; position:absolute; left:0; top:.55em; width:14px; height:14px; border-radius:4px; background:var(--accent)}
+  ul.big li b{color:var(--amber); font-weight:800}
+  ul.big li span{display:block; font-size:.62em; color:var(--ink-soft); font-weight:400; margin-top:4px}
+
+  /* coordinate diagram (compact, dark) */
+  .stage{margin-top:26px; position:relative; width:100%; max-width:720px; aspect-ratio:16/9; border:1px solid var(--line); border-radius:14px; background:
+      linear-gradient(0deg,transparent calc(100%/6 - 1px),rgba(255,255,255,.05) calc(100%/6)) 0 0/100% calc(100%/6),
+      linear-gradient(90deg,transparent calc(100%/8 - 1px),rgba(255,255,255,.05) calc(100%/8)) 0 0/calc(100%/8) 100%, var(--bg2);}
+  .dot{position:absolute; width:12px; height:12px; border-radius:50%; border:2px solid var(--accent2); transform:translate(-50%,-50%)}
+  .dot.f{width:18px;height:18px;border-color:var(--accent)}
+  .lab{position:absolute; font-family:ui-monospace,monospace; font-size:11px; color:var(--muted); transform:translate(-50%,-50%); white-space:nowrap}
+  .cam{position:absolute; left:50%; bottom:6%; transform:translateX(-50%); width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:15px solid var(--ink)}
+
+  /* demo badge */
+  .demo{display:inline-flex; align-items:center; gap:9px; margin-top:26px; background:rgba(38,214,214,.12); border:1px solid var(--accent2); color:var(--accent2); border-radius:99px; padding:9px 18px; font-size:clamp(13px,1.6vw,18px); font-weight:700; letter-spacing:.02em}
+  .demo::before{content:"◉"; animation:pulse 1.6s ease-in-out infinite}
+  @keyframes pulse{50%{opacity:.35}}
+  @media (prefers-reduced-motion:reduce){ .demo::before{animation:none} }
+
+  /* chrome: progress, nav, notes */
+  .progress{position:fixed; top:0; left:0; height:4px; background:var(--accent); width:0; z-index:20; transition:width .35s ease}
+  .nav{position:fixed; bottom:22px; left:0; right:0; display:flex; justify-content:center; align-items:center; gap:20px; z-index:20; color:var(--ink-soft)}
+  .nav button{background:var(--panel); border:1px solid var(--line); color:var(--ink); width:44px; height:44px; border-radius:50%; font-size:20px; cursor:pointer; display:grid; place-items:center; transition:.15s}
+  .nav button:hover{border-color:var(--accent); color:var(--accent)}
+  .nav button:focus-visible{outline:2px solid var(--accent2); outline-offset:2px}
+  .counter{font-family:ui-monospace,monospace; font-size:14px; min-width:70px; text-align:center; font-variant-numeric:tabular-nums}
+  .hint{position:fixed; bottom:26px; right:26px; font-size:12px; color:var(--muted); z-index:20; font-family:ui-monospace,monospace}
+  .brand{position:fixed; top:20px; right:26px; font-size:12px; color:var(--muted); z-index:20; font-family:ui-monospace,monospace; letter-spacing:.1em}
+
+  .notes{position:fixed; left:0; right:0; bottom:0; background:rgba(0,0,0,.9); border-top:1px solid var(--accent); padding:16px 26px 20px; color:var(--ink-soft); font-size:15px; line-height:1.5; z-index:30; display:none; max-height:34vh; overflow:auto}
+  body.show-notes .notes.on{display:block}
+  .notes b{color:var(--accent)}
+
+  @media (max-width:720px){
+    .qrow,.cols3,.cmp .row{grid-template-columns:1fr}
+    .fl{margin-left:0 !important}
+  }
+</style>
+
+<div class="progress" id="prog"></div>
+<div class="brand">個人課程筆記 · 非官方</div>
+
+<div class="deck" id="deck">
+
+  <!-- 1 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">3 小時課程精華 · 教學簡報</div>
+      <h1>AI 工作流 · Agent<br>· Vibe Coding</h1>
+      <p class="sub">把 3 小時濃縮成一堂能實際操作的課。</p>
+      <p class="mono" style="margin-top:22px;font-size:clamp(12px,1.4vw,15px);color:var(--muted);letter-spacing:.02em">整理：Mei｜課程來源：GARYTU AI 公開課｜本簡報為個人學習整理，非講師官方教材。</p>
+    </div>
+    <div class="notes on"><b>開場：</b>這堂是把 Garytu 的 AI 工作流課精華重講一次，重點是「方法」不是「工具排名」。全程約 X 分鐘，中間有幾個現場 DEMO，看到青色 ◉ 就是我切到工具實操的地方。</div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kick">// 全課的一句話</div>
+      <p class="thesis">這堂課不教你「<span class="hl">哪個 AI 最強</span>」，<br>而是教你把每次成功與失敗的判斷，<br><b>留下來變成規則</b>——<br>這才是唯一會複利的東西。</p>
+    </div>
+    <div class="notes on"><b>核心：</b>強調「複利」。工具會過時、模型會換版，但你抽出來的判斷規則會一直累積。這句是整場的錨。</div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">今天的路線</div>
+      <ol class="agenda">
+        <li>心態 <span>從問題出發，不從工具出發</span></li>
+        <li>三個引擎 <span>Skill · MCP · Agent 三層級</span></li>
+        <li>蒸餾 <span>全課核心，會現場示範</span></li>
+        <li>畫家獨門 <span>座標構圖 + 角色建置 prompt</span></li>
+        <li>影像方法論 <span>分層 · 低成本漏斗 · 停損</span></li>
+        <li>接案定價 + 你的下一步</li>
+      </ol>
+    </div>
+    <div class="notes on"><b>路線圖：</b>讓聽眾知道有 demo、有 prompt 可抄。第 3、4 段互動最多。</div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kick">// 01 心態</div>
+      <h2>從「問題」出發，<br>不從「工具」出發</h2>
+      <div class="qrow">
+        <div class="q"><div class="n">Q1</div><div class="t">輸入是什麼？</div><div class="d">資料 / 圖 / 文字 / 尺寸 / 影片</div></div>
+        <div class="q"><div class="n">Q2</div><div class="t">輸出要幹嘛？</div><div class="d">發想 / 提案 / 內部測試 / 正式交付</div></div>
+        <div class="q"><div class="n">Q3</div><div class="t">誰驗收？</div><div class="d">AI 自評 ≠ 客戶或你確認</div></div>
+        <div class="q"><div class="n">Q4</div><div class="t">失敗會怎樣？</div><div class="d">重畫草圖，還是洩漏資料 / 燒點數</div></div>
+      </div>
+    </div>
+    <div class="notes on"><b>重點：</b>AI 放大能力，也放大盲點。這四問答不出來，就別把任務全自動化。可請聽眾當場對自己一個案子回答。</div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kick">// 02 三個複利引擎</div>
+      <h2>Skill · MCP · Agent</h2>
+      <div class="cols3">
+        <div class="card"><div class="lab">SKILL</div><div class="h">作業手冊</div><div class="s">不是一次性 prompt，是把「何時用 / 輸入 / 流程 / 規則 / 驗收 / 例外」寫成可重複的文件。</div></div>
+        <div class="card"><div class="lab">MCP</div><div class="h">連外部工具的介面</div><div class="s">Skill 決定「怎麼做」，MCP 提供「去哪讀資料、建檔、執行」。原則：最小權限。</div></div>
+        <div class="card on"><div class="lab">AGENT</div><div class="h">三個自主層級</div><div class="s">L1 固定流程 · L2 有邊界自主 · L3 高度自主。</div><span class="badge">L2 是商業預設</span></div>
+      </div>
+    </div>
+    <div class="notes on"><b>提醒：</b>不是層級越高越好。Level 1 能穩定解決就別升級。L3 風險：費用累積、誤發、誤刪、資料外流。</div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kick">// 03 蒸餾 — 全課核心</div>
+      <h2>把「判斷」抽成<br>可重複的規則</h2>
+      <div class="formula">原版本特徵 → 收到的意見 → 意見背後的真需求 → 採取的修改 → 是否改善 → <span style="color:var(--accent)">可重複規則</span></div>
+      <div class="demo">現場 DEMO：拿一個退稿案，當場抽一條規則</div>
+    </div>
+    <div class="notes on"><b>DEMO 1｜蒸餾（切到 Claude Code）</b><br>
+① 觸發：說「蒸餾這個案子」叫出 design-distill skill。<br>
+② 餵案例：「我要蒸餾一個被客戶大改的設計案：案件/用途＿；我原版本特徵＿；客戶意見原話＿；我當時怎麼改＿；改完結果＿。請用蒸餾公式抽 1~2 條規則，每條標『何時用/為何/何時不要』。」<br>
+③ 壓力測試：「這條規則放到＿（另一種案型）還成立嗎？不成立幫我補邊界。」<br>
+④ 存檔：「把這條存進 rules.md，用 R00 格式。」<br>
+⚠ 備援：先在家跑順、截圖存好；網路出包就秀截圖。先想好一個自家案例當備案，別全靠現場聽眾。</div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kick">// 03 蒸餾</div>
+      <h2>感受 → 規則</h2>
+      <div class="cmp">
+        <div class="row"><div class="bad">字再大一點</div><div class="good">主標在手機縮圖一秒認不出時，優先加字級與字重、降背景細節；不要只加描邊（會破壞品牌氣質）。</div></div>
+        <div class="row"><div class="bad">畫面要高級</div><div class="good">主視覺只能一個第一焦點，縮到手機仍能辨識；裝飾必須能說明與主題的語意關係。</div></div>
+        <div class="row"><div class="bad">不要太 AI</div><div class="good">完稿前必過：縮小辨識 / 灰階 / 單色 / 實際尺寸 四道檢查。</div></div>
+      </div>
+    </div>
+    <div class="notes on"><b>關鍵：</b>規則一定要標「何時不要」，否則會被無腦套用。陷阱：別一次把所有聊天塞進 Skill，先一成功案＋一失敗案對照。</div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kick">// 04 畫家獨門 · 座標構圖</div>
+      <h2>用座標「導演」畫面</h2>
+      <div class="stage" aria-hidden="true">
+        <span class="dot f" style="left:50%;top:28%"></span><span class="lab" style="left:50%;top:17%">focal ↑ 背對</span>
+        <span class="dot" style="left:16%;top:60%"></span><span class="lab" style="left:16%;top:70%">guard</span>
+        <span class="dot" style="left:26%;top:42%"></span><span class="dot" style="left:22%;top:50%"></span><span class="dot" style="left:32%;top:46%"></span>
+        <span class="dot" style="left:20%;top:36%"></span><span class="dot" style="left:30%;top:32%"></span>
+        <span class="lab" style="left:23%;top:25%">left ×6</span>
+        <span class="dot" style="left:62%;top:44%"></span><span class="dot" style="left:68%;top:38%"></span><span class="dot" style="left:74%;top:44%"></span>
+        <span class="dot" style="left:80%;top:38%"></span><span class="dot" style="left:66%;top:32%"></span><span class="dot" style="left:76%;top:30%"></span>
+        <span class="lab" style="left:73%;top:22%">right ×11</span>
+        <div class="cam"></div>
+      </div>
+      <div class="formula" style="border-left-color:var(--accent)"><span class="mono">X = 左右(−10~+10) · D = 深度(0前景→越大越遠) · Direction = 面朝方向</span></div>
+    </div>
+    <div class="notes on"><b>差異點：</b>別人寫「一群人在街上」，他替每個角色標座標與朝向，連「哪裡留白」都寫進去。這是畫家的空間感，一般 AI 課教不到。</div>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kick">// 04 角色建置 · 3 步 prompt</div>
+      <h2>一張圖 → 一整套角色</h2>
+      <div class="steplab">STEP 1　定位人物特色</div>
+      <div class="prompt"><span class="zh">讓這張參考圖人像站在攝影棚，背景顏色為<span class="ph">＿</span>，構圖為<span class="ph">＿</span>，動作為<span class="ph">＿</span>。</span>A studio portrait…, background <span class="ph">[色]</span>, composition <span class="ph">[構圖]</span>, pose <span class="ph">[動作]</span>.</div>
+      <div class="steplab">STEP 2　各種拍攝角度　→　STEP 3　三視圖 turn-around</div>
+      <div class="demo">現場 DEMO：切到生圖工具，跑 STEP 1 → 3</div>
+    </div>
+    <div class="notes on"><b>DEMO 2｜角色建置（切到生圖工具，先上傳人像參考圖）</b><br>
+STEP1 定位特色：「讓這張參考圖人像站在攝影棚，背景顏色為＿，構圖為＿，動作為＿。」<br>
+STEP2 各種角度：「用同一個人物，生成正面／左右三分之二／左右側面／背面／半身／全身，保持臉型、髮型、五官、服裝完全一致。」<br>
+STEP3 三視圖：「建立三視圖（turn-around）。保持五官／髮色／眼型／服裝不變；不額外生成物件／飾品／Logo／材質；風格與原參考圖一致。」<br>
+⚠ 備援：參考圖先傳好；先在家跑成功、截圖備用，網路出包直接秀成果圖。</div>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kick">// 04 角色建置 · 一致性關鍵</div>
+      <h2>三句「鎖定句」</h2>
+      <ul class="big">
+        <li>保持 <b>X</b> 不變<span>facial features / hair color / eye shape / accessories / clothing</span></li>
+        <li>不額外生成 <b>Y</b><span>no extra objects / details / accessories / textures / logos</span></li>
+        <li>風格相似 <b>Z</b><span>similar to the reference image / an artist / an anime aesthetic</span></li>
+      </ul>
+      <p class="sub" style="max-width:34ch">一致性不靠運氣，靠把「什麼不准變」講死。</p>
+    </div>
+    <div class="notes on"><b>金句：</b>「一致性的關鍵不是生一張美圖，是三句鎖定句。」呼應下一段：主體用圖、特效用文字。</div>
+  </section>
+
+  <!-- 11 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kick">// 05 影像方法論</div>
+      <h2>分層生成，別一次要全部</h2>
+      <div class="flow">
+        <span class="chip">角色<span class="s">多角度鎖定</span></span><span class="arr">→</span>
+        <span class="chip">服裝</span><span class="arr">→</span>
+        <span class="chip">場景</span><span class="arr">→</span>
+        <span class="chip">動作</span><span class="arr">→</span>
+        <span class="chip">環境</span><span class="arr">→</span>
+        <span class="chip">特效<span class="s">最後才加</span></span>
+      </div>
+      <ul class="big" style="margin-top:30px"><li><b>主體用圖、特效用文字</b><span>人物/產品/Logo 用乾淨參考圖鎖身份；霧、花瓣、光效用文字或後製加</span></li><li>每完成一層，存一個<b>可回復的基準版</b></li></ul>
+    </div>
+    <div class="notes on"><b>為什麼：</b>身份/服裝/場景/動作/光線/特效在同一次生成會互相競爭，改越多越走鐘。分層＋存基準版是解法。</div>
+  </section>
+
+  <!-- 12 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kick">// 05 低成本探索漏斗</div>
+      <h2>別一開始就燒高畫質</h2>
+      <div class="funnel">
+        <div class="fl"><span class="k">L1</span><span class="b">文字確認 <span>腳本/動作/鏡頭，刪掉不服務敘事的效果</span></span></div>
+        <div class="fl"><span class="k">L2</span><span class="b">靜態關鍵幀 <span>用少量圖確認角色/場景/構圖</span></span></div>
+        <div class="fl"><span class="k">L3</span><span class="b">短秒數低成本測試 <span>短秒數、關聲音、低解析</span></span></div>
+        <div class="fl"><span class="k">L4</span><span class="b">方向確認 <span>存頭尾幀、記成功 prompt</span></span></div>
+        <div class="fl"><span class="k">L5</span><span class="b">正式生成 + 後製 <span>才加秒數/解析/音效/補幀/放大</span></span></div>
+      </div>
+      <p class="sub" style="max-width:40ch">停損：命中率約三次一中。修比重做久，就換底圖 / 縮動作 / 拆兩鏡 / 換真人。</p>
+    </div>
+    <div class="notes on"><b>金句：</b>「模型做不到時，先改製作設計，別用更長的提示詞掩蓋錯誤地基。」補幀救不了變形、放大救不了未成立的草稿。</div>
+  </section>
+
+  <!-- 13 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kick">// 06 接案定價</div>
+      <h2>AI 變快，<br>專業不該變免費</h2>
+      <p class="sub" style="max-width:32ch">客戶買的不是你花幾小時，是你的判斷與降低錯誤的能力。</p>
+      <ul class="big" style="margin-top:26px">
+        <li>報價要算進<span>商業範圍 · 複雜度 · 提案方向數 · 修改輪次 · 授權 · 出錯的商業風險</span></li>
+        <li>合作倫理<span>不繞過中間人——出錯一次就被封殺</span></li>
+        <li>作品案例放<b>判斷過程</b><span>問題→怎麼拆→為何選→限制→如何驗收，不只放漂亮定稿</span></li>
+      </ul>
+    </div>
+    <div class="notes on"><b>定位：</b>設計師會越來越像跨域整合者，但跨域不等於什麼都接——知道何時找夥伴。</div>
+  </section>
+
+  <!-- 14 -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">你的下一步</div>
+      <ul class="big">
+        <li>今天：一張<b>蒸餾對照表</b><span>挑一個做完的案，抽 3~5 條規則（一成功＋一失敗）</span></li>
+        <li>本週：一個<b>小 Skill 草稿</b><span>使用情境 / 輸入 / 流程 / 規則 / 驗收 / 資料不足要問什麼</span></li>
+        <li>順手：試<b>座標構圖 + 角色建置</b><span>拿一張熟的畫面套格式，餵給生圖模型對照</span></li>
+      </ul>
+    </div>
+    <div class="notes on"><b>收束：</b>把行動壓到最小——今天只要一張對照表。別一次讀完所有東西。</div>
+  </section>
+
+  <!-- 15 -->
+  <section class="slide">
+    <div class="inner" style="text-align:center">
+      <p class="thesis" style="text-align:center">留下判斷，<br>才會<b>複利</b>。</p>
+      <p class="sub" style="margin-left:auto;margin-right:auto;text-align:center;max-width:30ch">工具會換，規則會留。<br>謝謝 · Q&amp;A</p>
+    </div>
+    <div class="notes on"><b>結尾：</b>回扣開場那句。留時間 Q&A，並邀請大家挑一個案子回去做第一張蒸餾表。</div>
+  </section>
+
+</div>
+
+<div class="nav">
+  <button id="prev" aria-label="上一頁">‹</button>
+  <span class="counter" id="counter">01 / 15</span>
+  <button id="next" aria-label="下一頁">›</button>
+</div>
+<div class="hint">← → 翻頁 · N 講者提示 · F 全螢幕</div>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var n = slides.length, i = 0;
+  var prog = document.getElementById('prog');
+  var counter = document.getElementById('counter');
+  function pad(x){ return (x<10?'0':'')+x; }
+  function show(idx){
+    i = Math.max(0, Math.min(n-1, idx));
+    slides.forEach(function(s,k){
+      s.classList.toggle('active', k===i);
+      var note = s.querySelector('.notes');
+      if(note) note.classList.toggle('on', k===i);
+    });
+    prog.style.width = ((i+1)/n*100)+'%';
+    counter.textContent = pad(i+1)+' / '+pad(n);
+  }
+  function next(){ show(i+1); }
+  function prev(){ show(i-1); }
+  document.getElementById('next').addEventListener('click', next);
+  document.getElementById('prev').addEventListener('click', prev);
+  document.addEventListener('keydown', function(e){
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){ e.preventDefault(); next(); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); prev(); }
+    else if(e.key==='Home'){ show(0); }
+    else if(e.key==='End'){ show(n-1); }
+    else if(e.key==='n'||e.key==='N'){ document.body.classList.toggle('show-notes'); }
+    else if(e.key==='f'||e.key==='F'){
+      if(!document.fullscreenElement){ (document.documentElement.requestFullscreen||function(){}).call(document.documentElement); }
+      else if(document.exitFullscreen){ document.exitFullscreen(); }
+    }
+  });
+  show(0);
+})();
+</script>
